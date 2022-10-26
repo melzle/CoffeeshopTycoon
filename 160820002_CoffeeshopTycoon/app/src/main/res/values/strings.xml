@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">160820002_CoffeeshopTycoon</string>
+    <string name="ScrollView">ScrollView</string>
+    <string name="txtWelcome">Welcome, Name</string>
+    <string name="btnUp" />
+    <string name="locationIngredient"><![CDATA[Location Rent & Ingredient Cost]]></string>
+</resources>
