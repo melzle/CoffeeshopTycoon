@@ -5,10 +5,16 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_result.*
 
 class ResultActivity : AppCompatActivity() {
+    override fun onBackPressed() {
+        Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show()
+        return
+    }
+
     companion object{
         val BALANCEUPDATE = "BALANCEUPDATE"
         val DAYUPDATE = "DAYUPDATE"
@@ -61,8 +67,6 @@ class ResultActivity : AppCompatActivity() {
                 Global.day++
 
                 startActivity(intent)
-
-                finish()
             }
         }
     }

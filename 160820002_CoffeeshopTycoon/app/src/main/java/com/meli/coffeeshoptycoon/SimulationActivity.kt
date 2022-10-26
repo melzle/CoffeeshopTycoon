@@ -2,11 +2,17 @@ package com.meli.coffeeshoptycoon
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_simulation.*
 
 class SimulationActivity : AppCompatActivity() {
+    override fun onBackPressed() {
+        Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show()
+        return
+    }
+
     companion object{
         val SELLCUP = "SELLCUP"
         val PRICEPERCUP = "PRICEPERCUP"
@@ -72,9 +78,7 @@ class SimulationActivity : AppCompatActivity() {
             }
             Global.simulation.add(Simulation(cusMessage, timeMessage))
         }
-        val lm: LinearLayoutManager = LinearLayoutManager(this)
-        recyclerSimul.layoutManager = lm
-        recyclerSimul.setHasFixedSize(true)
+
         recyclerSimul.adapter = SimulAdaptor(this)
 
         btnResult.setOnClickListener(){
@@ -82,9 +86,7 @@ class SimulationActivity : AppCompatActivity() {
             intent.putExtra("SELLCUP", perhitunganTerjual).toString()
             intent.putExtra("PRICEPERCUP", priceSellCoffee).toString()
             intent.putExtra("EXPENSES", expenses).toString()
-
             startActivity(intent)
-
             finish()
         }
     }

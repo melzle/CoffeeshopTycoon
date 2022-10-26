@@ -12,6 +12,11 @@ import kotlinx.android.synthetic.main.activity_preparation.*
 import kotlin.random.Random
 
 class PreparationActivity : AppCompatActivity() {
+    override fun onBackPressed() {
+        Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show()
+        return
+    }
+
     companion object{
         val SELLING = "SELLING"
         val PRICEALL = "PRICEALL"
@@ -21,6 +26,7 @@ class PreparationActivity : AppCompatActivity() {
         val LOCATION = "LOCATION"
         val LOCATIONPRICE = "LOCATIONPRICE"
     }
+
     var playerName = ""
     var coffeePrice = 500
     var milkPrice = 1000
@@ -216,13 +222,23 @@ class PreparationActivity : AppCompatActivity() {
         }
 
         btnStartDay.setOnClickListener(){
-            if (totalCosts <= Global.balance){
-                Global.balance = Global.balance - totalCosts
-                displayData()
-                openSimulation()
+            if (totalCupCoffee > 0){
+                if (sellingPrice > 0){
+                    if (totalCosts <= Global.balance){
+                        Global.balance = Global.balance - totalCosts
+                        displayData()
+                        openSimulation()
+                    }
+                    else{
+                        Toast.makeText(this, "Insufficient Balance", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(this, "Please input the selling price at least 1", Toast.LENGTH_SHORT).show();
+                }
             }
             else{
-                Toast.makeText(this, "Insufficient Balance", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please input minimum 1 cup number to sell", Toast.LENGTH_SHORT).show();
             }
         }
     }

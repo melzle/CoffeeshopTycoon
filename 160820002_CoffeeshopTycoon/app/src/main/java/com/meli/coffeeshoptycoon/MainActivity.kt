@@ -14,6 +14,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 
 class MainActivity : AppCompatActivity() {
+    override fun onBackPressed() {
+        Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show()
+        return
+    }
 
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
