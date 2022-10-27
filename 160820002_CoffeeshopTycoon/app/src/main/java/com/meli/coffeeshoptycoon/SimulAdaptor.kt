@@ -26,4 +26,5 @@ class SimulAdaptor (val context: Context): RecyclerView.Adapter<SimulAdaptor.Sim
             holder.v.txtCust.text = customer
         }
     }
+
 }
