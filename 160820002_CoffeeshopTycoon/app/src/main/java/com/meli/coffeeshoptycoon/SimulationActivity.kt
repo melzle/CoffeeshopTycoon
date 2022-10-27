@@ -14,18 +14,18 @@ class SimulationActivity : AppCompatActivity() {
     }
 
     companion object{
-        val SELLCUP = "SELLCUP"
-        val PRICEPERCUP = "PRICEPERCUP"
+        val SOLDCUP = "SOLDCUP"
+        val PRICEACUP = "PRICEACUP"
         val EXPENSES = "EXPENSES"
     }
 
-    var perhitunganTerjual = 0
-    var cupTerjual = 0
-    var cupTersedia = 0
-    var dummyCup = 0
-
-    var cusMessage = ""
-    var timeMessage = ""
+    //initial variable
+    var soldCalculation = 0
+    var soldCup = 0
+    var availableCup = 0
+    var cup = 0
+    var custInfo = ""
+    var timeInfo = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,59 +33,50 @@ class SimulationActivity : AppCompatActivity() {
 
         Global.simulation.clear()
 
-        var totalCupsCoffee = intent.getStringExtra(PreparationActivity.SELLING).toString().toInt()
-        var priceAllIngridientCoffee = intent.getStringExtra(PreparationActivity.PRICEALL).toString().toInt()
-        var priceSellCoffee = intent.getStringExtra(PreparationActivity.PRICESELL).toString().toInt()
-        var totalAllPrice = intent.getStringExtra(PreparationActivity.TOTAL).toString().toInt()
-        var weather = intent.getStringExtra(PreparationActivity.WEATHER)
-        var location = intent.getStringExtra(PreparationActivity.LOCATION)
-        var locationPrice = intent.getStringExtra(PreparationActivity.LOCATIONPRICE).toString().toInt()
-
-        var expenses = totalAllPrice
+        val totalCup = intent.getStringExtra(PreparationActivity.TOTALCUP).toString().toInt()
+        val priceACup = intent.getStringExtra(PreparationActivity.SELLINGPRICE).toString().toInt()
+        val totalCost = intent.getStringExtra(PreparationActivity.TOTALCOSTS).toString().toInt()
+        val weather = intent.getStringExtra(PreparationActivity.WEATHER)
 
         txtDaySimul.text = "DAY " + Global.day
-
         txtWeatherSimul.text = weather.toString()
 
-        cupTersedia = totalCupsCoffee
-        dummyCup = totalCupsCoffee
+        availableCup = totalCup
+        cup = totalCup
 
-        cupTersedia = totalCupsCoffee
-        dummyCup = totalCupsCoffee
-
-        for(i in 7 .. 18){
-            if(cupTerjual <= dummyCup){
-                if (cupTersedia != 0){
-                    if(perhitunganTerjual != dummyCup){
-                        cupTerjual = (0 .. cupTersedia).shuffled().random()
-                        perhitunganTerjual += cupTerjual
-                        cupTersedia -= cupTerjual
-                        if(cupTerjual == 0){
-                            cusMessage = "No Customer"
-                        }else{
-                            cusMessage = "$cupTerjual Customer"
+        for (hour in 7 .. 18){
+            if (hour >= 10){
+                timeInfo = "$hour.00"
+            } else {
+                timeInfo = "0$hour.00"
+            }
+            if (soldCup <= cup){
+                if (availableCup == 0){
+                    custInfo = "Out of Stock"
+                }
+                else if(availableCup != 0){
+                    if (soldCalculation != cup){
+                        soldCup = (0 .. availableCup).shuffled().random()
+                        soldCalculation += soldCup
+                        availableCup -= soldCup
+                        if (soldCup != 0){
+                            custInfo = "$soldCup Customer"
+                        } else {
+                            custInfo = "No Customer"
                         }
                     }
                 }
-                else if(cupTersedia == 0){
-                    cusMessage = "Out of Stock"
-                }
             }
-            if(i>=10){
-                timeMessage="$i.00"
-            }else{
-                timeMessage="0$i.00"
-            }
-            Global.simulation.add(Simulation(cusMessage, timeMessage))
+            Global.simulation.add(Simulation(timeInfo, custInfo))
         }
 
         recyclerSimul.adapter = SimulAdaptor(this)
 
         btnResult.setOnClickListener(){
-            var intent = Intent(this, ResultActivity::class.java)
-            intent.putExtra("SELLCUP", perhitunganTerjual).toString()
-            intent.putExtra("PRICEPERCUP", priceSellCoffee).toString()
-            intent.putExtra("EXPENSES", expenses).toString()
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("SOLDCUP", soldCalculation).toString()
+            intent.putExtra("PRICEACUP", priceACup).toString()
+            intent.putExtra("EXPENSES", totalCost).toString()
             startActivity(intent)
             finish()
         }

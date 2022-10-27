@@ -14,7 +14,10 @@ class SimulAdaptor (val context: Context): RecyclerView.Adapter<SimulAdaptor.Sim
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.activity_simul_layout, parent, false)
         return SimulationViewHolder(v)
+    }
 
+    override fun getItemCount(): Int {
+        return Global.simulation.size
     }
 
     override fun onBindViewHolder(holder: SimulationViewHolder, position: Int) {
@@ -22,9 +25,5 @@ class SimulAdaptor (val context: Context): RecyclerView.Adapter<SimulAdaptor.Sim
             holder.v.txtTime.text = time
             holder.v.txtCust.text = customer
         }
-    }
-
-    override fun getItemCount(): Int {
-        return Global.simulation.size
     }
 }

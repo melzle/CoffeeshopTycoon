@@ -18,39 +18,39 @@ class PreparationActivity : AppCompatActivity() {
     }
 
     companion object{
-        val SELLING = "SELLING"
-        val PRICEALL = "PRICEALL"
-        val PRICESELL = "PRICESELL"
-        val TOTAL = "TOTAL"
+        val TOTALCUP = "TOTALCUP"
+        val TOTALPRICE = "TOTALPRICE"
+        val SELLINGPRICE = "SELLINGPRICE"
+        val TOTALCOSTS = "TOTALCOSTS"
         val WEATHER = "WEATHER"
-        val LOCATION = "LOCATION"
-        val LOCATIONPRICE = "LOCATIONPRICE"
     }
 
-    var playerName = ""
+    //price of each ingridient
     var coffeePrice = 500
     var milkPrice = 1000
     var waterPrice = 200
 
+    //initial variable
     var numCoffee = 0
     var numMilk = 0
     var numWater = 0
-
-    var priceOfCoffee = coffeePrice * numCoffee
-    var priceOfMilk = milkPrice * numMilk
-    var priceOfWater = waterPrice * numWater
-    var totalPrice = priceOfCoffee + priceOfMilk + priceOfWater
-
     var rentCost = 0
     var totalCupCoffee = 0
     var totalSellCoffee = 0
     var sellingPrice = 0
 
+    //calculate
+    var priceOfCoffee = coffeePrice * numCoffee
+    var priceOfMilk = milkPrice * numMilk
+    var priceOfWater = waterPrice * numWater
+    var totalPrice = priceOfCoffee + priceOfMilk + priceOfWater
     var totalCosts = rentCost + totalSellCoffee
 
+    //weather
     var weather : Weather = Global.weather[0]
     var spinnIndex = ""
 
+    //variable for recipe
     var recipeName = ""
     var inputCoffee = ""
     var inputMilk = ""
@@ -63,16 +63,20 @@ class PreparationActivity : AppCompatActivity() {
 
         txtDay.text = "DAY ${Global.day}"
 
+        //weather
         val weatherList : List<Weather> = Global.weather.toList()
         val randomArrWeather = weatherList.shuffled()
         val weatherIndex = Random.nextInt(until = 3)
         weather = randomArrWeather.get(weatherIndex)
         txtWeather.text = weather.name
 
+        //welcome text
         txtWelcome.text = "Welcome, ${Global.playername}"
 
+        //balance
         txtBalance.text = "Balance : IDR ${Global.balance.toString()}"
 
+        //spinner
         val adapter = ArrayAdapter(this, R.layout.activity_spinner_layout, Global.location)
         adapter.setDropDownViewResource(R.layout.activity_spinner_item_layout)
         spinnerLocations.adapter = adapter
@@ -91,12 +95,13 @@ class PreparationActivity : AppCompatActivity() {
 
         addToSpinnerRecipes()
 
+        //recipe
         btnSaveRecipe.setOnClickListener {
-            if(txtRecipeName.text.toString() != ""){
+            if (txtRecipeName.text.toString() != ""){
                 addToSpinnerRecipes()
                 saveDataRecipe()
                 txtRecipeName.setText("")
-            }else{
+            } else{
                 Toast.makeText(this, "Please input the recipes name", Toast.LENGTH_SHORT).show();
             }
         }
@@ -142,7 +147,7 @@ class PreparationActivity : AppCompatActivity() {
                 numWater = txtNumWater.text.toString().toInt()
                 priceOfWater = waterPrice * numWater
                 displayData()
-            }else{
+            } else {
                 numWater = 0
                 priceOfWater = waterPrice * numWater
                 displayData()
@@ -150,21 +155,19 @@ class PreparationActivity : AppCompatActivity() {
         }
 
         txtCupToSell.addTextChangedListener(){
-            if(txtCupToSell.text.toString() != ""){
+            if (txtCupToSell.text.toString() != ""){
                 totalCupCoffee = txtCupToSell.text.toString().toInt()
                 displayData()
-            }
-            else{
+            } else {
                 totalCupCoffee = 0
                 displayData()
             }
         }
 
         txtSellingPrice.addTextChangedListener() {
-            if(txtSellingPrice.text.toString() != ""){
+            if (txtSellingPrice.text.toString() != ""){
                 sellingPrice = txtSellingPrice.text.toString().toInt()
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Please input the selling price at least 1", Toast.LENGTH_SHORT).show();
             }
         }
@@ -181,8 +184,7 @@ class PreparationActivity : AppCompatActivity() {
                 numCoffee -= 1
                 txtNumCoffee.setText(numCoffee.toString())
                 displayData()
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Please input the coffee bigger than or equal 1", Toast.LENGTH_SHORT).show();
             }
         }
@@ -198,8 +200,7 @@ class PreparationActivity : AppCompatActivity() {
                 numMilk -= 1
                 txtNumMilk.setText(numMilk.toString())
                 displayData()
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Please input the milk bigger than or equal 1", Toast.LENGTH_SHORT).show();
             }
         }
@@ -211,16 +212,16 @@ class PreparationActivity : AppCompatActivity() {
         }
 
         btnDownWater.setOnClickListener(){
-            if (numWater >=1){
+            if (numWater >= 1){
                 numWater -= 1
                 txtNumWater.setText(numWater.toString())
                 displayData()
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Please input the water bigger than or equal 1", Toast.LENGTH_SHORT).show();
             }
         }
 
+        //start day
         btnStartDay.setOnClickListener(){
             if (totalCupCoffee > 0){
                 if (sellingPrice > 0){
@@ -228,16 +229,13 @@ class PreparationActivity : AppCompatActivity() {
                         Global.balance = Global.balance - totalCosts
                         displayData()
                         openSimulation()
-                    }
-                    else{
+                    } else {
                         Toast.makeText(this, "Insufficient Balance", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(this, "Please input the selling price at least 1", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Please input minimum 1 cup number to sell", Toast.LENGTH_SHORT).show();
             }
         }
@@ -294,14 +292,11 @@ class PreparationActivity : AppCompatActivity() {
 
     fun openSimulation(){
         val intent = Intent(this, SimulationActivity::class.java)
-        intent.putExtra("PLAYERNAME", playerName.toString())
-        intent.putExtra("SELLING", totalCupCoffee.toString())
-        intent.putExtra("PRICEALL", totalPrice.toString())
-        intent.putExtra("PRICESELL", sellingPrice.toString())
-        intent.putExtra("TOTAL", totalCosts.toString())
+        intent.putExtra("TOTALCUP", totalCupCoffee.toString())
+        intent.putExtra("TOTALPRICE", totalPrice.toString())
+        intent.putExtra("SELLINGPRICE", sellingPrice.toString())
+        intent.putExtra("TOTALCOSTS", totalCosts.toString())
         intent.putExtra("WEATHER", weather.name.toString())
-        intent.putExtra("LOCATION", spinnIndex.toString())
-        intent.putExtra("LOCATIONPRICE", rentCost.toString())
 
         startActivity(intent)
         finish()

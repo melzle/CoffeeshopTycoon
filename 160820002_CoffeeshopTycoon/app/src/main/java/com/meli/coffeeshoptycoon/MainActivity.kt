@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         editor.putString("playername", "Meliyana")
         editor.apply()
 
-
         btnLogin.setOnClickListener {
             val username = txtUsername.text.toString()
             val password = txtPassword.text.toString()
@@ -49,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 if (username == getUsername && password == getPassword){
                     Global.playername = getPlayername.toString()
                     val intent = Intent(this, PreparationActivity::class.java)
-                    intent.putExtra("USERNAME", "Meliyana")
+                    intent.putExtra("USERNAME", getPlayername.toString())
                     startActivity(intent)
                     finish()
                 }

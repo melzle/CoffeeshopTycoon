@@ -15,9 +15,26 @@ class ResultActivity : AppCompatActivity() {
         return
     }
 
-    companion object{
-        val BALANCEUPDATE = "BALANCEUPDATE"
-        val DAYUPDATE = "DAYUPDATE"
+    fun reset(){
+        Global.balance = 350000
+        Global.day = 1
+    }
+
+    fun setResultData(){
+        val soldCup = intent.getIntExtra(SimulationActivity.SOLDCUP,0).toString().toInt()
+        val priceACup = intent.getIntExtra(SimulationActivity.PRICEACUP,0).toString().toInt()
+        val expenses = intent.getIntExtra(SimulationActivity.EXPENSES,0).toString().toInt()
+
+        val revenues = soldCup * priceACup
+        val profit = revenues - expenses
+
+        Global.balance += revenues
+        txtResultDay.text = "DAY ${Global.day} RESULT"
+        txtCupTotal.text = "${soldCup.toString()} cup of coffee"
+        txtPricePerCup.text = "@IDR ${priceACup.toString()}"
+        txtSellingTotal.text = "IDR ${revenues.toString()}"
+        txtLocIngredientCost.text = "IDR ${expenses.toString()}"
+        txtProfit.text ="IDR ${profit.toString()}"
     }
 
     @SuppressLint("SetTextI18n")
@@ -25,47 +42,28 @@ class ResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
 
-        var sellCup = intent.getIntExtra(SimulationActivity.SELLCUP,0).toString().toInt()
-        var pricePerCup = intent.getIntExtra(SimulationActivity.PRICEPERCUP,0).toString().toInt()
-        var expenses = intent.getIntExtra(SimulationActivity.EXPENSES,0).toString().toInt()
+        setResultData()
 
-        var revenues = sellCup * pricePerCup
-
-        var profit = revenues - expenses
-
-        Global.balance = Global.balance+revenues
-
-        txtResultDay.text = "DAY ${Global.day} RESULT"
-
-        txtCupTotal.text = "${sellCup.toString()} cup of coffee"
-        txtPricePerCup.text = "@IDR ${pricePerCup.toString()}"
-        txtSellingTotal.text = "IDR ${revenues.toString()}"
-
-        txtLocIngredientCost.text = "IDR ${expenses.toString()}"
-
-        txtProfit.text ="IDR ${profit.toString()}"
+        // minimimumCost = 100000 + 1000 + 500 + 200
+        val minimumCost = 101700
 
         btnStartNewDay.setOnClickListener(){
-            if(Global.balance < 101700){
+            if (Global.balance < minimumCost) {
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage("You have gone bankrupt")
-                builder.setPositiveButton("PLAY AGAIN", DialogInterface.OnClickListener { dialogInterface, i ->
-                    Global.balance = 350000
-                    Global.day = 1
-                    var intent = Intent(this,PreparationActivity::class.java)
-
+                builder.setMessage("Game Over! Your Coffeeshop have gone bankrupt")
+                builder.setPositiveButton("Play Again", DialogInterface.OnClickListener { dialogInterface, i ->
+                    reset()
+                    val intent = Intent(this,PreparationActivity::class.java)
                     startActivity(intent)
                 })
-                builder.setNegativeButton("EXIT", DialogInterface.OnClickListener { dialogInterface, i ->
+                builder.setNegativeButton("Exit", DialogInterface.OnClickListener { dialogInterface, i ->
                     finish()
                 })
                 builder.create().show()
             }
             else{
-                var intent = Intent(this,PreparationActivity::class.java)
-
+                val intent = Intent(this,PreparationActivity::class.java)
                 Global.day++
-
                 startActivity(intent)
             }
         }

@@ -1,3 +1,3 @@
 package com.meli.coffeeshoptycoon
 
-data class Simulation(val customer:String, val time:String)
+data class Simulation(val time:String, val customer:String)
