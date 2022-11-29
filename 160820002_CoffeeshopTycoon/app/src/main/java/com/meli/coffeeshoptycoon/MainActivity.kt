@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             val getUsername = sharedPreferences.getString("username", "error")
             val getPassword = sharedPreferences.getString("password", "error")
             val getPlayername= sharedPreferences.getString("playername", "error")
+
             if(username == ""){
                 Toast.makeText(this, "please fill in your username", Toast.LENGTH_SHORT).show()
             }
@@ -52,11 +53,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
-                else if (username != getUsername){
-                    Toast.makeText(this, "Your username is wrong", Toast.LENGTH_SHORT).show()
-                }
-                else if (password != getPassword){
-                    Toast.makeText(this, "Your password is wrong", Toast.LENGTH_SHORT).show()
+                else {
+                    Toast.makeText(this, "Your username or password is not match in our records", Toast.LENGTH_SHORT).show()
                 }
             }
         }
